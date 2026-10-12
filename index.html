@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQBJEYWXE0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-ZQBJEYWXE0');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+  <title>ロボティクスシンポジア2027補足資料</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css?v=20261012">
+  <script src="https://kit.fontawesome.com/f47cb5070b.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container my-5">
+
+    <!-- Page heading -->
+    <header class="row">
+      <div class="col-12 text-center">
+        <h1 class="h2">ロボティクスシンポジア2027補足資料</h1>
+      </div>
+    </header>
+
+    <hr class="my-4">
+
+    <!-- I2P Results -->
+    <section aria-labelledby="i2p-results-title">
+      <h4 id="i2p-results-title" class="mb-3 text-center">画像-点群レジストレーション（I2P）の結果</h4>
+      <div class="row g-4 justify-content-center">
+        <figure class="col-md-6 mb-0">
+          <div class="ratio ratio-16x9 demo-frame">
+            <img src="images/demo/robosym2027_in_house_dataset_i2p.gif" alt="独自データセット 画像-点群レジストレーション（I2P）の結果">
+          </div>
+          <figcaption class="text-center mt-2 fs-5">独自データセット</figcaption>
+        </figure>
+        <figure class="col-md-6 mb-0">
+          <div class="ratio ratio-16x9 demo-frame">
+            <img src="images/demo/robosym2027_r3live_dataset_i2p.gif" alt="R3LIVEデータセット 画像-点群レジストレーション（I2P）の結果">
+          </div>
+          <figcaption class="text-center mt-2 fs-5">
+            R3LIVEデータセット
+            <sup><a href="https://arxiv.org/abs/2109.07982" target="_blank" rel="noopener noreferrer" aria-label="arXivのR3LIVE論文">[1]</a></sup>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <hr class="my-4">
+
+    <!-- Abstract -->
+    <div class="row">
+      <div class="col-12">
+        <h4 class="mb-3 text-center">概要</h4>
+        <p class="text-justify">
+          本稿では，RGBカメラ画像とLiDAR点群の両方を入力として扱う統一型フィードフォワードレジストレーションモデルLiV3Rを提案する．
+          LiV3Rは，Transformerに基づくフィードフォワード型3次元再構成モデルMapAnythingを基盤とし，その高い幾何推論能力をLiDAR観測へ適応させる．
+          大規模な画像とLiDARのペアデータセットを必要とせずにLiDARへの適応を実現するため，既存のRGB-Dデータセットから生成した擬似LiDARデータで事前学習を行い，その後，比較的少量の実LiDARデータでファインチューニングする効率的な学習戦略を導入する．
+          さらに，反射強度，幾何情報，疎性情報を共同で符号化し，共通の特徴空間へ写像する専用のLiDARエンコーダを導入する．
+          広範なアブレーション実験により，LiDARの疎性情報を早期に導入し，反射強度と幾何情報を共同で符号化することで，レジストレーションに有効なLiDAR表現が得られることを示す．
+          LiV3Rは，モダリティ間の明示的な対応探索や別途の姿勢推定処理を行わず，1回の順伝播でセンサ間の相対姿勢を直接推定し，単一のモデルで画像と点群の任意の組み合わせに対応する．
+          R$^3$LIVEデータセットを用いた実験により，タスク専用手法に匹敵するレジストレーション精度を示す．
+        </p>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- System Overview -->
+    <div class="row">
+      <div class="col-12">
+        <h4 class="mb-3 text-center">システム概要</h4>
+        <p class="text-justify">
+          RGB画像，LiDAR点群，および任意の幾何情報からなる$N$個の入力に対し，LiV3Rはモダリティごとのエンコーダを用いて各入力を共通の潜在空間へ写像する．各LiDARスキャンは，1チャネルの反射強度画像と，レイ方向，深度，疎性マスクへ前処理される．これらの情報を結合し，LiDARエンコーダへまとめて入力する．反射強度，幾何情報，疎性情報を効果的に組み込む方法を検討するため，図中の(a)〜(d)に示す4種類のLiDARエンコーダ構成を比較する．
+        </p>
+        <figure class="system-overview-figure">
+          <a href="images/systemoverview.pdf" target="_blank" rel="noopener" aria-label="システム概要図をPDFで開く">
+            <img src="images/systemoverview.png" alt="LiV3Rのシステム概要と4種類のLiDARエンコーダ構成" class="system-overview-image" width="2723" height="1098">
+          </a>
+          <figcaption class="mt-2 text-center text-muted small">
+            LiV3Rのシステム概要と4種類のLiDARエンコーダ構成．
+            <a href="images/systemoverview.pdf" target="_blank" rel="noopener">高解像度PDFを開く</a>．
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Registration Demos -->
+    <section aria-labelledby="registration-demos-title">
+      <h4 id="registration-demos-title" class="mb-4 text-center">デモ</h4>
+
+      <section class="demo-scene mb-5" aria-labelledby="in-house-dataset-title">
+        <h5 id="in-house-dataset-title" class="demo-scene-title">独自データセット</h5>
+
+        <section class="demo-environment" aria-labelledby="in-house-indoor-title">
+          <h6 id="in-house-indoor-title" class="demo-environment-title">屋内</h6>
+
+          <article class="demo-task">
+            <h6 class="demo-task-title">画像マッチングと再構成（I2I）</h6>
+            <div class="demo-pair" role="group" aria-label="独自データセット 屋内 画像マッチングと再構成（I2I）の入力と結果">
+              <div class="demo-pair-media demo-input-media">
+                <span class="demo-media-label">入力</span>
+                <img src="images/demo/in_house_dataset_i2i_input.png" alt="独自データセット 屋内 画像マッチングと再構成（I2I）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+              <div class="demo-pair-media demo-result-media">
+                <span class="demo-media-label">結果</span>
+                <img src="images/demo/robosym2027_in_house_dataset_i2i.gif" alt="独自データセット 屋内 画像マッチングと再構成（I2I）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </article>
+
+          <article class="demo-task">
+            <h6 class="demo-task-title">画像-点群レジストレーション（I2P）</h6>
+            <div class="demo-pair" role="group" aria-label="独自データセット 屋内 画像-点群レジストレーション（I2P）の入力と結果">
+              <div class="demo-pair-media demo-input-media">
+                <span class="demo-media-label">入力</span>
+                <img src="images/demo/in_house_dataset_i2p_input.png" alt="独自データセット 屋内 画像-点群レジストレーション（I2P）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+              <div class="demo-pair-media demo-result-media">
+                <span class="demo-media-label">結果</span>
+                <img src="images/demo/robosym2027_in_house_dataset_i2p.gif" alt="独自データセット 屋内 画像-点群レジストレーション（I2P）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </article>
+
+          <article class="demo-task mb-0">
+            <h6 class="demo-task-title">点群レジストレーション（P2P）</h6>
+            <div class="demo-pair" role="group" aria-label="独自データセット 屋内 点群レジストレーション（P2P）の入力と結果">
+              <div class="demo-pair-media demo-input-media">
+                <span class="demo-media-label">入力</span>
+                <img src="images/demo/in_house_dataset_p2p_input.png" alt="独自データセット 屋内 点群レジストレーション（P2P）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+              <div class="demo-pair-media demo-result-media">
+                <span class="demo-media-label">結果</span>
+                <img src="images/demo/robosym2027_in_house_dataset_p2p.gif" alt="独自データセット 屋内 点群レジストレーション（P2P）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="demo-environment" aria-labelledby="in-house-outdoor-title">
+          <h6 id="in-house-outdoor-title" class="demo-environment-title">屋外</h6>
+
+          <article class="demo-task">
+            <h6 class="demo-task-title">画像マッチングと再構成（I2I）</h6>
+            <div class="demo-pair" role="group" aria-label="独自データセット 屋外 画像マッチングと再構成（I2I）の入力と結果">
+              <div class="demo-pair-media demo-input-media">
+                <span class="demo-media-label">入力</span>
+                <img src="images/demo/in_house_dataset_outdoor_i2i_input.png" alt="独自データセット 屋外 画像マッチングと再構成（I2I）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+              <div class="demo-pair-media demo-result-media">
+                <span class="demo-media-label">結果</span>
+                <img src="images/demo/robosym2027_in_house_dataset_outdoor_i2i.gif" alt="独自データセット 屋外 画像マッチングと再構成（I2I）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </article>
+
+          <article class="demo-task">
+            <h6 class="demo-task-title">画像-点群レジストレーション（I2P）</h6>
+            <div class="demo-pair" role="group" aria-label="独自データセット 屋外 画像-点群レジストレーション（I2P）の入力と結果">
+              <div class="demo-pair-media demo-input-media">
+                <span class="demo-media-label">入力</span>
+                <img src="images/demo/in_house_dataset_outdoor_i2p_input.png" alt="独自データセット 屋外 画像-点群レジストレーション（I2P）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+              <div class="demo-pair-media demo-result-media">
+                <span class="demo-media-label">結果</span>
+                <img src="images/demo/robosym2027_in_house_dataset_outdoor_i2p.gif" alt="独自データセット 屋外 画像-点群レジストレーション（I2P）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </article>
+
+          <article class="demo-task mb-0">
+            <h6 class="demo-task-title">点群レジストレーション（P2P）</h6>
+            <div class="demo-pair" role="group" aria-label="独自データセット 屋外 点群レジストレーション（P2P）の入力と結果">
+              <div class="demo-pair-media demo-input-media">
+                <span class="demo-media-label">入力</span>
+                <img src="images/demo/in_house_dataset_outdoor_p2p_input.png" alt="独自データセット 屋外 点群レジストレーション（P2P）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+              <div class="demo-pair-media demo-result-media">
+                <span class="demo-media-label">結果</span>
+                <img src="images/demo/robosym2027_in_house_dataset_outdoor_p2p.gif" alt="独自データセット 屋外 点群レジストレーション（P2P）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="demo-scene" aria-labelledby="r3live-dataset-title">
+        <h5 id="r3live-dataset-title" class="demo-scene-title">
+          R3LIVEデータセット
+          <sup><a href="https://arxiv.org/abs/2109.07982" target="_blank" rel="noopener noreferrer" aria-label="arXivのR3LIVE論文">[1]</a></sup>
+        </h5>
+
+        <article class="demo-task">
+          <h6 class="demo-task-title">画像マッチングと再構成（I2I）</h6>
+          <div class="demo-pair" role="group" aria-label="R3LIVEデータセット 画像マッチングと再構成（I2I）の入力と結果">
+            <div class="demo-pair-media demo-input-media">
+              <span class="demo-media-label">入力</span>
+              <img src="images/demo/r3live_dataset_i2i_input.png" alt="R3LIVEデータセット 画像マッチングと再構成（I2I）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+            </div>
+            <div class="demo-pair-media demo-result-media">
+              <span class="demo-media-label">結果</span>
+              <img src="images/demo/robosym2027_r3live_dataset_i2i.gif" alt="R3LIVEデータセット 画像マッチングと再構成（I2I）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </article>
+
+        <article class="demo-task">
+          <h6 class="demo-task-title">画像-点群レジストレーション（I2P）</h6>
+          <div class="demo-pair" role="group" aria-label="R3LIVEデータセット 画像-点群レジストレーション（I2P）の入力と結果">
+            <div class="demo-pair-media demo-input-media">
+              <span class="demo-media-label">入力</span>
+              <img src="images/demo/r3live_dataset_i2p_input.png" alt="R3LIVEデータセット 画像-点群レジストレーション（I2P）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+            </div>
+            <div class="demo-pair-media demo-result-media">
+              <span class="demo-media-label">結果</span>
+              <img src="images/demo/robosym2027_r3live_dataset_i2p.gif" alt="R3LIVEデータセット 画像-点群レジストレーション（I2P）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </article>
+
+        <article class="demo-task mb-0">
+          <h6 class="demo-task-title">点群レジストレーション（P2P）</h6>
+          <div class="demo-pair" role="group" aria-label="R3LIVEデータセット 点群レジストレーション（P2P）の入力と結果">
+            <div class="demo-pair-media demo-input-media">
+              <span class="demo-media-label">入力</span>
+              <img src="images/demo/r3live_dataset_p2p_input.png" alt="R3LIVEデータセット 点群レジストレーション（P2P）の入力" width="520" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+            </div>
+            <div class="demo-pair-media demo-result-media">
+              <span class="demo-media-label">結果</span>
+              <img src="images/demo/robosym2027_r3live_dataset_p2p.gif" alt="R3LIVEデータセット 点群レジストレーション（P2P）の結果" width="680" style="display:block; width:100%; max-width:100%; height:auto;" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </article>
+      </section>
+    </section>
+
+
+    <br><br>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
