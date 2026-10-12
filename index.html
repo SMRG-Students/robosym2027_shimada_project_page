@@ -25,7 +25,7 @@
   <title>ロボティクスシンポジア2027補足資料</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <link rel="stylesheet" href="styles.css?v=20261012">
+  <link rel="stylesheet" href="styles.css?v=20261012-video-medium">
   <script src="https://kit.fontawesome.com/f47cb5070b.js" crossorigin="anonymous"></script>
 </head>
 
@@ -41,8 +41,18 @@
 
     <hr class="my-4">
 
+    <!-- Supplementary Video -->
+    <section aria-labelledby="supplementary-video-title">
+      <h4 id="supplementary-video-title" class="mb-3 text-center">補足動画</h4>
+      <video class="supplementary-video" controls playsinline preload="metadata"
+        width="1278" height="718" aria-label="LiV3Rの補足動画">
+        <source src="images/demo/robosym2027_2.mp4?v=seek" type="video/mp4">
+        <a href="images/demo/robosym2027_2.mp4">補足動画（MP4）を開く</a>
+      </video>
+    </section>
+
     <!-- I2P Results -->
-    <section aria-labelledby="i2p-results-title">
+    <!-- <section aria-labelledby="i2p-results-title">
       <h4 id="i2p-results-title" class="mb-3 text-center">画像-点群レジストレーション（I2P）の結果</h4>
       <div class="row g-4 justify-content-center">
         <figure class="col-md-6 mb-0">
@@ -61,25 +71,7 @@
           </figcaption>
         </figure>
       </div>
-    </section>
-
-    <hr class="my-4">
-
-    <!-- Abstract -->
-    <div class="row">
-      <div class="col-12">
-        <h4 class="mb-3 text-center">概要</h4>
-        <p class="text-justify">
-          本稿では，RGBカメラ画像とLiDAR点群の両方を入力として扱う統一型フィードフォワードレジストレーションモデルLiV3Rを提案する．
-          LiV3Rは，Transformerに基づくフィードフォワード型3次元再構成モデルMapAnythingを基盤とし，その高い幾何推論能力をLiDAR観測へ適応させる．
-          大規模な画像とLiDARのペアデータセットを必要とせずにLiDARへの適応を実現するため，既存のRGB-Dデータセットから生成した擬似LiDARデータで事前学習を行い，その後，比較的少量の実LiDARデータでファインチューニングする効率的な学習戦略を導入する．
-          さらに，反射強度，幾何情報，疎性情報を共同で符号化し，共通の特徴空間へ写像する専用のLiDARエンコーダを導入する．
-          広範なアブレーション実験により，LiDARの疎性情報を早期に導入し，反射強度と幾何情報を共同で符号化することで，レジストレーションに有効なLiDAR表現が得られることを示す．
-          LiV3Rは，モダリティ間の明示的な対応探索や別途の姿勢推定処理を行わず，1回の順伝播でセンサ間の相対姿勢を直接推定し，単一のモデルで画像と点群の任意の組み合わせに対応する．
-          R$^3$LIVEデータセットを用いた実験により，タスク専用手法に匹敵するレジストレーション精度を示す．
-        </p>
-      </div>
-    </div>
+    </section> -->
 
     <hr class="my-4">
 
@@ -88,15 +80,15 @@
       <div class="col-12">
         <h4 class="mb-3 text-center">システム概要</h4>
         <p class="text-justify">
-          RGB画像，LiDAR点群，および任意の幾何情報からなる$N$個の入力に対し，LiV3Rはモダリティごとのエンコーダを用いて各入力を共通の潜在空間へ写像する．各LiDARスキャンは，1チャネルの反射強度画像と，レイ方向，深度，疎性マスクへ前処理される．これらの情報を結合し，LiDARエンコーダへまとめて入力する．反射強度，幾何情報，疎性情報を効果的に組み込む方法を検討するため，図中の(a)〜(d)に示す4種類のLiDARエンコーダ構成を比較する．
+          RGB画像，LiDAR点群，および任意の幾何情報からなる$N$個の入力に対し，LiV3Rはモダリティごとのエンコーダを用いて各入力を共通の潜在空間へ写像する．各LiDARスキャンは，1チャネルの反射強度画像と，レイ方向，深度，疎性マスクへ前処理される．これらの情報を結合し，LiDARエンコーダへまとめて入力する．反射強度，幾何情報，疎性情報を効果的に組み込む方法を検討するため，専用のLiDARエンコーダと，図中の(a)〜(d)に示す4種類のアブレーション構成を比較する．
         </p>
         <figure class="system-overview-figure">
-          <a href="images/systemoverview.pdf" target="_blank" rel="noopener" aria-label="システム概要図をPDFで開く">
-            <img src="images/systemoverview.png" alt="LiV3Rのシステム概要と4種類のLiDARエンコーダ構成" class="system-overview-image" width="2723" height="1098">
+          <a href="images/systemoverview.pdf?v=f0533f12681e" target="_blank" rel="noopener" aria-label="システム概要図をPDFで開く">
+            <img src="images/systemoverview.png?v=f0533f12681e" alt="LiV3Rのシステム概要と4種類のアブレーション構成" class="system-overview-image" width="3000" height="1205">
           </a>
           <figcaption class="mt-2 text-center text-muted small">
-            LiV3Rのシステム概要と4種類のLiDARエンコーダ構成．
-            <a href="images/systemoverview.pdf" target="_blank" rel="noopener">高解像度PDFを開く</a>．
+            LiV3Rのシステム概要と4種類のアブレーション構成．
+            <a href="images/systemoverview.pdf?v=f0533f12681e" target="_blank" rel="noopener">高解像度PDFを開く</a>．
           </figcaption>
         </figure>
       </div>
